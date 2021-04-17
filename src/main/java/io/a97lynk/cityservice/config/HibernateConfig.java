@@ -19,33 +19,33 @@ import java.util.Map;
 @Configuration
 public class HibernateConfig {
 
-    @Autowired
-    private JpaProperties jpaProperties;
+	@Autowired
+	private JpaProperties jpaProperties;
 
-    @Bean
-    JpaVendorAdapter jpaVendorAdapter() {
-        return new HibernateJpaVendorAdapter();
-    }
+	@Bean
+	JpaVendorAdapter jpaVendorAdapter() {
+		return new HibernateJpaVendorAdapter();
+	}
 
-    @Bean
-    LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            DataSource dataSource,
-            MultiTenantConnectionProvider multiTenantConnectionProviderImpl,
-            CurrentTenantIdentifierResolver currentTenantIdentifierResolverImpl
-    ) {
+	@Bean
+	LocalContainerEntityManagerFactoryBean entityManagerFactory(
+			DataSource dataSource,
+			MultiTenantConnectionProvider multiTenantConnectionProviderImpl,
+			CurrentTenantIdentifierResolver currentTenantIdentifierResolverImpl
+	) {
 
-        Map<String, Object> jpaPropertiesMap = new HashMap<>(jpaProperties.getProperties());
-        jpaPropertiesMap.put(Environment.MULTI_TENANT, MultiTenancyStrategy.DATABASE);
-        jpaPropertiesMap.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProviderImpl);
-        jpaPropertiesMap.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolverImpl);
-        jpaPropertiesMap.put(Environment.FORMAT_SQL, true);
-        jpaPropertiesMap.put(Environment.SHOW_SQL, true);
+		Map<String, Object> jpaPropertiesMap = new HashMap<>(jpaProperties.getProperties());
+		jpaPropertiesMap.put(Environment.MULTI_TENANT, MultiTenancyStrategy.DATABASE);
+		jpaPropertiesMap.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProviderImpl);
+		jpaPropertiesMap.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolverImpl);
+		jpaPropertiesMap.put(Environment.FORMAT_SQL, true);
+		jpaPropertiesMap.put(Environment.SHOW_SQL, true);
 
-        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(dataSource);
-        em.setPackagesToScan("io.a97lynk*");
-        em.setJpaVendorAdapter(this.jpaVendorAdapter());
-        em.setJpaPropertyMap(jpaPropertiesMap);
-        return em;
-    }
+		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+		em.setDataSource(dataSource);
+		em.setPackagesToScan("io.a97lynk*");
+		em.setJpaVendorAdapter(this.jpaVendorAdapter());
+		em.setJpaPropertyMap(jpaPropertiesMap);
+		return em;
+	}
 }

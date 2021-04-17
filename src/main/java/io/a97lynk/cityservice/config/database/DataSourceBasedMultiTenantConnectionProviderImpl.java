@@ -12,37 +12,33 @@ import java.util.Map;
 
 @Component
 public class DataSourceBasedMultiTenantConnectionProviderImpl
-        extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl {
+		extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl {
 
-    @Autowired
-    private DataSource defaultDS;
+	boolean init = false;
+	@Autowired
+	private DataSource defaultDS;
+	@Autowired
+	private ApplicationContext context;
+	private Map<String, DataSource> map = new HashMap<>();
+	private String DEFAULT_TENANT_ID = "public";
 
-    @Autowired
-    private ApplicationContext context;
+	@PostConstruct
+	public void load() {
+		map.put(DEFAULT_TENANT_ID, defaultDS);
+	}
 
-    private Map<String, DataSource> map = new HashMap<>();
+	@Override
+	protected DataSource selectAnyDataSource() {
+		return map.get(DEFAULT_TENANT_ID);
+	}
 
-    boolean init = false;
-
-    private String DEFAULT_TENANT_ID = "public";
-
-    @PostConstruct
-    public void load() {
-        map.put(DEFAULT_TENANT_ID, defaultDS);
-    }
-
-    @Override
-    protected DataSource selectAnyDataSource() {
-        return map.get(DEFAULT_TENANT_ID);
-    }
-
-    @Override
-    protected DataSource selectDataSource(String tenantIdentifier) {
-        if (!init) {
-            init = true;
-            TenantDataSource tenantDataSource = context.getBean(TenantDataSource.class);
-            map.putAll(tenantDataSource.getAll());
-        }
-        return map.get(tenantIdentifier) != null ? map.get(tenantIdentifier) : map.get(DEFAULT_TENANT_ID);
-    }
+	@Override
+	protected DataSource selectDataSource(String tenantIdentifier) {
+		if (!init) {
+			init = true;
+			TenantDataSource tenantDataSource = context.getBean(TenantDataSource.class);
+			map.putAll(tenantDataSource.getAll());
+		}
+		return map.get(tenantIdentifier) != null ? map.get(tenantIdentifier) : map.get(DEFAULT_TENANT_ID);
+	}
 }

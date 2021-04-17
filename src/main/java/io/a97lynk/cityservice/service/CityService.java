@@ -14,33 +14,31 @@ import java.util.List;
 @Service
 public class CityService {
 
-    @Autowired
-    private CityRepository cityRepository;
+	@PersistenceContext
+	public EntityManager entityManager;
+	@Autowired
+	DataSource dataSource;
+	@Autowired
+	private CityRepository cityRepository;
 
-    @PersistenceContext
-    public EntityManager entityManager;
+	public void save(City city) {
+		cityRepository.save(city);
+	}
 
-    @Autowired
-    DataSource dataSource;
+	public List<City> getAll() throws SQLException {
+		return cityRepository.findAll();
 
-    public void save(City city) {
-        cityRepository.save(city);
-    }
+	}
 
-    public List<City> getAll() throws SQLException {
-        return cityRepository.findAll();
+	public City get(Long id) {
+		return cityRepository.findById(id).get();
+	}
 
-    }
+	public City getByName(String name) {
+		return cityRepository.findByName(name);
+	}
 
-    public City get(Long id) {
-        return cityRepository.findById(id).get();
-    }
-
-    public City getByName(String name) {
-        return cityRepository.findByName(name);
-    }
-
-    public void delete(String name) {
-        cityRepository.deleteByName(name);
-    }
+	public void delete(String name) {
+		cityRepository.deleteByName(name);
+	}
 }

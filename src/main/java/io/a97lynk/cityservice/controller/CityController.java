@@ -15,36 +15,36 @@ import java.util.List;
 @RequestMapping("/city")
 public class CityController {
 
-    @Autowired
-    private CityService cityService;
+	@Autowired
+	private CityService cityService;
 
-    @PostMapping
-    public ResponseEntity<?> save(@RequestBody City city) {
-        cityService.save(city);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+	@PostMapping
+	public ResponseEntity<?> save(@RequestBody City city) {
+		cityService.save(city);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
-    @GetMapping
-    public ResponseEntity<List<City>> getAll() throws SQLException {
-        List<City> cities = cityService.getAll();
-        return new ResponseEntity<>(cities, HttpStatus.OK);
-    }
+	@GetMapping
+	public ResponseEntity<List<City>> getAll() throws SQLException {
+		List<City> cities = cityService.getAll();
+		return new ResponseEntity<>(cities, HttpStatus.OK);
+	}
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<City> get(@PathVariable(value = "id") Long id) {
-        City city = cityService.get(id);
-        return new ResponseEntity<>(city, HttpStatus.OK);
-    }
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<City> get(@PathVariable(value = "id") Long id) {
+		City city = cityService.get(id);
+		return new ResponseEntity<>(city, HttpStatus.OK);
+	}
 
-    @RequestMapping(value = "/{name}", method = RequestMethod.GET)
-    public ResponseEntity<City> get(@PathVariable(value = "name") String name) {
-        City city = cityService.getByName(name);
-        return new ResponseEntity<>(city, HttpStatus.OK);
-    }
+	@RequestMapping(value = "/{name}", method = RequestMethod.GET)
+	public ResponseEntity<City> get(@PathVariable(value = "name") String name) {
+		City city = cityService.getByName(name);
+		return new ResponseEntity<>(city, HttpStatus.OK);
+	}
 
-    @RequestMapping(value = "/{name}", method = RequestMethod.DELETE)
-    public ResponseEntity<City> delete(@PathVariable(value = "name") String name) {
-        cityService.delete(name);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+	@RequestMapping(value = "/{name}", method = RequestMethod.DELETE)
+	public ResponseEntity<City> delete(@PathVariable(value = "name") String name) {
+		cityService.delete(name);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }
