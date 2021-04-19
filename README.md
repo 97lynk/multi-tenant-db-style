@@ -1,4 +1,8 @@
-## Prerequisites
+# City Service DB Style
+City service is a sample project which following **multi-tenancy concepts with separate database**. 
+This service using PostgreSQL as main database to store configurations that provide information to connect tenant databases.
+
+# Prerequisites
 
 - JDK 1.8
 - Intellij IDEA
@@ -24,7 +28,8 @@ This project use PostgreSQL to store master database. So access to PostgreSQL co
 and insert data by [master-postgres.sql](./src/main/resources/master-postgres.sql) file.
 
 ### Create tenant database
-We also access every container on the below table to create database (e.g create tenant4 database in H2 container). After that we alse create city table. Please follow sql scripts.
+We also access every container on the below table to create database (e.g. create tenant4 database in H2 container). 
+Then we also create city table. Please follow sql scripts.
 
 | Database type | Database name | Script |
 | --- | --- | --- |
@@ -34,7 +39,7 @@ We also access every container on the below table to create database (e.g create
 | H2 Database | tenant4 |[tenant4-h2db.sql](./src/main/resources/tenant4-h2db.sql) |
 | Microsoft SQL | tenant5 | [tenant5-mssql.sql](./src/main/resources/tenant5-mssql.sql) |
 
-### Inport project
+### Import project
 Using Intellij IDEA to import and run project on port 8081.
 
 ## Testing
@@ -59,6 +64,6 @@ curl -X GET --location "http://localhost:8081/city" \
 ```
  
  ## Roadmap
- I will deploy city serivce on docker as a container.
+ I will deploy city service on docker as a container.
 
  
