@@ -3,10 +3,7 @@ package io.a97lynk.cityservice.config.database;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -19,11 +16,32 @@ public class DataSourceConfig implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+
+	@Column(name = "name")
 	private String name;
+
+	@Column(name = "connection_string_template")
 	private String url;
+
+	@Column(name = "username")
 	private String username;
+
+	@Column(name = "password")
 	private String password;
+
+	@Column(name = "host")
+	private String host;
+
+	@Column(name = "port")
+	private int port;
+
+	@Column(name = "database_name")
+	private String dbName;
+
+	@Column(name = "driver_class_name")
 	private String driverClassName;
+
+	@Column(name = "initialize")
 	private boolean initialize;
 
 	public static long getSerialVersionUID() {
@@ -47,7 +65,7 @@ public class DataSourceConfig implements Serializable {
 	}
 
 	public String getUrl() {
-		return url;
+		return String.format(url, host, port, dbName);
 	}
 
 	public void setUrl(String url) {
@@ -84,5 +102,29 @@ public class DataSourceConfig implements Serializable {
 
 	public void setInitialize(boolean initialize) {
 		this.initialize = initialize;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public String getDbName() {
+		return dbName;
+	}
+
+	public void setDbName(String dbName) {
+		this.dbName = dbName;
 	}
 }

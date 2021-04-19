@@ -1,7 +1,6 @@
 package io.a97lynk.cityservice.config.database;
 
 import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -15,12 +14,18 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl
 		extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl {
 
 	boolean init = false;
-	@Autowired
-	private DataSource defaultDS;
-	@Autowired
-	private ApplicationContext context;
+
 	private Map<String, DataSource> map = new HashMap<>();
+
 	private String DEFAULT_TENANT_ID = "public";
+
+	private final DataSource defaultDS;
+	private final ApplicationContext context;
+
+	public DataSourceBasedMultiTenantConnectionProviderImpl(DataSource defaultDS, ApplicationContext context) {
+		this.defaultDS = defaultDS;
+		this.context = context;
+	}
 
 	@PostConstruct
 	public void load() {
@@ -39,6 +44,7 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl
 			TenantDataSource tenantDataSource = context.getBean(TenantDataSource.class);
 			map.putAll(tenantDataSource.getAll());
 		}
-		return map.get(tenantIdentifier) != null ? map.get(tenantIdentifier) : map.get(DEFAULT_TENANT_ID);
+
+		return map.getOrDefault(tenantIdentifier, defaultDS);
 	}
 }

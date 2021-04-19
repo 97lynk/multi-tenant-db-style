@@ -1,10 +1,8 @@
 package io.a97lynk.cityservice.config.database;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -14,37 +12,27 @@ import java.util.Map;
 @Component
 public class TenantDataSource implements Serializable {
 
-	private HashMap<String, DataSource> dataSources = new HashMap<>();
+	private final DataSourceConfigRepository configRepo;
 
-	@Autowired
-	private DataSourceConfigRepository configRepo;
-
-	public DataSource getDataSource(String name) {
-		if (dataSources.get(name) != null) {
-			return dataSources.get(name);
-		}
-		DataSource dataSource = createDataSource(name);
-		if (dataSource != null) {
-			dataSources.put(name, dataSource);
-		}
-		return dataSource;
+	public TenantDataSource(DataSourceConfigRepository configRepo) {
+		this.configRepo = configRepo;
 	}
 
 	// load config database and init datasource
-	@PostConstruct
 	public Map<String, DataSource> getAll() {
+
 		List<DataSourceConfig> configList = configRepo.findAll();
+
 		Map<String, DataSource> result = new HashMap<>();
 		for (DataSourceConfig config : configList) {
-			DataSource dataSource = getDataSource(config.getName());
+			DataSource dataSource = createDataSource(config);
 			result.put(config.getName(), dataSource);
 		}
+
 		return result;
 	}
 
-	private DataSource createDataSource(String name) {
-		DataSourceConfig config = configRepo.findByName(name);
-		if (config == null) return null;
+	private DataSource createDataSource(DataSourceConfig config) {
 
 		DataSourceBuilder factory = DataSourceBuilder
 				.create().driverClassName(config.getDriverClassName())
@@ -52,6 +40,7 @@ public class TenantDataSource implements Serializable {
 				.password(config.getPassword())
 				.url(config.getUrl());
 		DataSource ds = factory.build();
+
 		return ds;
 	}
 
