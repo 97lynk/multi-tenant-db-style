@@ -18,7 +18,6 @@ public class CityServiceApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-//
 //        if (dataSourceConfigRepository.findAll().size() == 2) return;
 //
 //        DataSourceConfig dataSourceConfig = new DataSourceConfig();

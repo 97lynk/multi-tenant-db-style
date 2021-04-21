@@ -2,7 +2,7 @@ spring:
     datasource:
         password: awhjw
         username: postgres
-        url: jdbc:postgresql://localhost:33062/db_style?createDatabaseIfNotExist=true&useSSL=false
+        url: jdbc:postgresql://postgres-service:5432/db_style?createDatabaseIfNotExist=true&useSSL=false
         driver-class-name: org.postgresql.Driver
     jpa:
         hibernate.ddl-auto: none
